@@ -31,8 +31,11 @@ export function Home() {
     async function getData() {
       try {
         const response = await fetch(
-          "https://sujeitoprogramador.com/api-cripto/?key=67f9141787211428&pref=BRL"
+          "https://sujeitoprogramador.com/api-cripto/?key=9b74f336bee213f4&pref=BRL"
         );
+        // if (!response.ok) {
+        //   throw new Error("Falha na resposta da API");
+        // }
         const data: ApiResponse = await response.json();
 
         const coinsData = data.coins.slice(0, 15);
@@ -73,7 +76,7 @@ export function Home() {
         <thead>
           <tr>
             <th scope="col">Moeda</th>
-            <th scope="col">Valor De Mercado</th>
+            <th scope="col">Valor Global</th>
             <th scope="col">Preço</th>
             <th scope="col">Volume</th>
           </tr>

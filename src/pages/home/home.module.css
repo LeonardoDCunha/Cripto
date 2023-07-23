@@ -58,8 +58,10 @@ table th {
   color: #fff;
 }
 
-.tdLabel {
-  color: #fff;
+.tdLabel,
+.tdProfit,
+.tdLoss {
+  color: #bbb;
 }
 
 .tdProfit {
@@ -77,7 +79,7 @@ table th {
 }
 
 .link:hover {
-  color: #128baf;
+  color: #38b6ff;
 }
 
 table th,
