@@ -5,3 +5,14 @@
   height: 120px;
   max-width: 1080px;
 }
+
+.logo {
+  position: relative;
+  width: 60px;
+  height: 60px;
+}
+
+.logoString {
+  position: relative;
+  top: 5px;
+}
