@@ -7,7 +7,6 @@ export function Header() {
   return (
     <header className={styles.container}>
       <div>
-        s
         <Link to="/">
           <div>
             <img className={styles.logo} src={logo} alt="Logo Cripto" />

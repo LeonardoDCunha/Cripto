@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import styles from "./home.module.css";
 import { FaSearchDollar } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 //https://coinlib.io/api/v1/coin?key=9b74f336bee213f4&pref=EUR&symbol=BTC
 //https://www.mercadobitcoin.com.br/api-doc/
@@ -26,6 +26,8 @@ interface ApiResponse {
 
 export function Home() {
   const [coins, setCoins] = useState<FormattedCoinProps[]>([]);
+  const [inputValue, setInputValue] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function getData() {
@@ -62,10 +64,22 @@ export function Home() {
     getData();
   }, []);
 
+  function handleSearch(e: FormEvent) {
+    e.preventDefault();
+
+    if (inputValue === "") return;
+
+    navigate(`/detail/${inputValue}`);
+  }
+
   return (
     <main className={styles.container}>
-      <form className={styles.form}>
-        <input placeholder="Digite o simbolo da moeda: BTC..." />
+      <form className={styles.form} onSubmit={handleSearch}>
+        <input
+          placeholder="Digite o simbolo da moeda: BTC..."
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+        />
 
         <button type="submit">
           <FaSearchDollar size={30} color="#FFF" />
