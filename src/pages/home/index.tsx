@@ -33,7 +33,7 @@ export function Home() {
     async function getData() {
       try {
         const response = await fetch(
-          "https://sujeitoprogramador.com/api-cripto/?key=9b74f336bee213f4&pref=BRL"
+          "https://sujeitoprogramador.com/api-cripto/?key=9b74f336bee213f4&=prefBRL"
         );
         // if (!response.ok) {
         //   throw new Error("Falha na resposta da API");
@@ -100,7 +100,7 @@ export function Home() {
           {coins.map((coin) => (
             <tr key={coin.name} className={styles.tr}>
               <td className={styles.tdLabel} data-label="Moeda">
-                <Link className={styles.link} to={`/datail/${coin.symbol}`}>
+                <Link className={styles.link} to={`/detail/${coin.symbol}`}>
                   <span>{coin.name}</span> | {coin.symbol}
                 </Link>
               </td>
@@ -112,7 +112,7 @@ export function Home() {
               </td>
               <td
                 className={
-                  Number(coin?.delta_24h) >= 0 ? styles.tdProfit : styles.tdLoss
+                  Number(coin?.delta_24h) > 10 ? styles.tdProfit : styles.tdLoss
                 }
                 data-label="Volume"
               >
