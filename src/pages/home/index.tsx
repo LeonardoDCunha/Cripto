@@ -112,7 +112,7 @@ export function Home() {
               </td>
               <td
                 className={
-                  Number(coin?.delta_24h) > 10 ? styles.tdProfit : styles.tdLoss
+                  Number(coin?.delta_24h) >= 0 ? styles.tdProfit : styles.tdLoss
                 }
                 data-label="Volume"
               >

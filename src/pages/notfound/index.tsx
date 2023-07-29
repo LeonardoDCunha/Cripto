@@ -1,3 +1,5 @@
+import styles from ('./notfound.module.css')
+
 export function Notfound() {
   return (
     <div>
