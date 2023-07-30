@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import styles from "./detail.module.css";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
-interface CoinProps {
+interface CoinProp {
   symbol: string;
   name: string;
   price: string;
@@ -20,41 +20,38 @@ interface CoinProps {
 
 export function Detail() {
   const { cripto } = useParams();
-  const [detail, setDetail] = useState<CoinProps>();
+  const [detail, setDetail] = useState<CoinProp>();
   const [loading, setLoading] = useState(true);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
-    async function getData() {
-      try {
-        const response = await fetch(
-          `https://sujeitoprogramador.com/api-cripto/coin/?key=9b74f336bee213f4&symbol=${cripto}`
-        );
+    function getData() {
+      fetch(
+        `https://sujeitoprogramador.com/api-cripto/coin/?key=9b74f336bee213f4&pref=BRL&symbol=${cripto}`
+      )
+        .then((response) => response.json())
+        .then((data: CoinProp) => {
+          if (data.error) {
+            navigate("/");
+          }
 
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
+          const price = Intl.NumberFormat("pt-BR", {
+            style: "currency",
+            currency: "BRL",
+          });
 
-        const data = await response.json();
+          const resultData = {
+            ...data,
+            formatedPrice: price.format(Number(data.price)),
+            formatedMarket: price.format(Number(data.market_cap)),
+            formatedLowprice: price.format(Number(data.low_24h)),
+            formatedHighprice: price.format(Number(data.high_24h)),
+          };
 
-        const price = Intl.NumberFormat("pt-BR", {
-          style: "currency",
-          currency: "BRL",
+          setDetail(resultData);
+          setLoading(false);
         });
-
-        const resultData = {
-          ...data,
-          formatedPrice: price.format(Number(data.price)),
-          formatedMarket: price.format(Number(data.market_cap)),
-          formatedLowprice: price.format(Number(data.low_24h)),
-          formatedHighprice: price.format(Number(data.high_24h)),
-        };
-
-        setDetail(resultData);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error ao processar arquivos:", error);
-        setDetail(null);
-      }
     }
 
     getData();
@@ -63,7 +60,7 @@ export function Detail() {
   if (loading) {
     return (
       <div className={styles.container}>
-        <h4 className={styles.center}> Carregando Informações . . .</h4>
+        <h4 className={styles.center}>Carregando informações...</h4>
       </div>
     );
   }
@@ -75,19 +72,16 @@ export function Detail() {
 
       <section className={styles.content}>
         <p>
-          <strong>Preço: </strong>
-          {detail?.formatedPrice}
+          <strong>Preço:</strong> {detail?.formatedPrice}
         </p>
         <p>
-          <strong>Maior preço nas últimas 24h: </strong>
-          {detail?.formatedHighprice}
+          <strong>Maior preço 24h:</strong> {detail?.formatedHighprice}
         </p>
         <p>
-          <strong>Menor preço nas últimas 24h: </strong>
-          {detail?.formatedLowprice}
+          <strong>Menor preço 24h:</strong> {detail?.formatedLowprice}
         </p>
         <p>
-          <strong>Delta 24h: </strong>
+          <strong>Delta 24h:</strong>
           <span
             className={
               Number(detail?.delta_24h) >= 0 ? styles.profit : styles.loss
@@ -97,8 +91,7 @@ export function Detail() {
           </span>
         </p>
         <p>
-          <strong>Valor Mercado: </strong>
-          {detail?.formatedMarket}
+          <strong>Valor mercado:</strong> {detail?.formatedMarket}
         </p>
       </section>
     </div>
