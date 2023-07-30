@@ -13,6 +13,7 @@ interface CoinProps {
   symbol: string;
   volume_24h: string;
   market_cap: string;
+  numberDelta?: number;
 }
 
 interface FormattedCoinProps extends CoinProps {
@@ -51,9 +52,10 @@ export function Home() {
           ...item,
           formatedPrice: price.format(Number(item.price)),
           formatedMarket: price.format(Number(item.market_cap)),
+          numberDelta: parseFloat(item.delta_24h.replace(",", ".")),
         }));
 
-        console.log(formatResult);
+        // console.log(parseFloat(formatResult[0].delta_24h.replace(",", ".")));
         setCoins(formatResult);
       } catch (err) {
         // O Erro será tratado aqui
@@ -112,7 +114,9 @@ export function Home() {
               </td>
               <td
                 className={
-                  Number(coin?.delta_24h) >= 0 ? styles.tdProfit : styles.tdLoss
+                  coin.numberDelta && coin.numberDelta >= 0
+                    ? styles.tdProfit
+                    : styles.tdLoss
                 }
                 data-label="Volume"
               >
