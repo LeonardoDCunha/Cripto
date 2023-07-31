@@ -2,6 +2,7 @@ import { FormEvent, useEffect, useState } from "react";
 import styles from "./home.module.css";
 import { FaSearchDollar } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
+import Loading from "../../components/loading";
 
 //https://coinlib.io/api/v1/coin?key=9b74f336bee213f4&pref=EUR&symbol=BTC
 //https://www.mercadobitcoin.com.br/api-doc/
@@ -29,6 +30,7 @@ export function Home() {
   const [coins, setCoins] = useState<FormattedCoinProps[]>([]);
   const [inputValue, setInputValue] = useState("");
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function getData() {
@@ -57,6 +59,7 @@ export function Home() {
 
         // console.log(parseFloat(formatResult[0].delta_24h.replace(",", ".")));
         setCoins(formatResult);
+        setLoading(false);
       } catch (err) {
         // O Erro será tratado aqui
         console.error("Ocorreu um erro ao obter os dados:", err);
@@ -65,6 +68,10 @@ export function Home() {
 
     getData();
   }, []);
+
+  if (loading) {
+    return <Loading />;
+  }
 
   function handleSearch(e: FormEvent) {
     e.preventDefault();
@@ -94,7 +101,7 @@ export function Home() {
             <th scope="col">Moeda</th>
             <th scope="col">Valor Global</th>
             <th scope="col">Preço</th>
-            <th scope="col">Volume</th>
+            <th scope="col">Lucro/Perda</th>
           </tr>
         </thead>
 
