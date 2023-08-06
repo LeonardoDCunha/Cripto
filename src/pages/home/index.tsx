@@ -101,7 +101,7 @@ export function Home() {
             <th scope="col">Moeda</th>
             <th scope="col">Valor Global</th>
             <th scope="col">Preço</th>
-            <th scope="col">Lucro/Perda</th>
+            <th scope="col">Stonks or Not Stonks</th>
           </tr>
         </thead>
 
