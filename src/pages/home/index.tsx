@@ -84,15 +84,15 @@ export function Home() {
   return (
     <main className={styles.container}>
       <form className={styles.form} onSubmit={handleSearch}>
+        <button type="submit">
+          <FaSearchDollar size={30} color="#1d1c20" />
+        </button>
         <input
           placeholder="Digite o simbolo da moeda: BTC..."
           value={inputValue}
+          className={styles.boldPlaceholder}
           onChange={(e) => setInputValue(e.target.value)}
         />
-
-        <button type="submit">
-          <FaSearchDollar size={30} color="#FFF" />
-        </button>
       </form>
 
       <table>
