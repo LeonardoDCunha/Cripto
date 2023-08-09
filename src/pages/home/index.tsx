@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import styles from "./home.module.css";
 import { FaSearchDollar } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
@@ -26,7 +26,7 @@ interface ApiResponse {
   coins: CoinProps[];
 }
 
-export function Home() {
+const Home: React.FC = () => {
   const [coins, setCoins] = useState<FormattedCoinProps[]>([]);
   const [inputValue, setInputValue] = useState("");
   const navigate = useNavigate();
@@ -57,9 +57,13 @@ export function Home() {
           numberDelta: parseFloat(item.delta_24h.replace(",", ".")),
         }));
 
+        const loadingTimeout = setTimeout(() => {
+          setLoading(false);
+          clearTimeout(loadingTimeout);
+        }, 1000);
+
         // console.log(parseFloat(formatResult[0].delta_24h.replace(",", ".")));
         setCoins(formatResult);
-        setLoading(false);
       } catch (err) {
         // O Erro será tratado aqui
         console.error("Ocorreu um erro ao obter os dados:", err);
@@ -68,10 +72,6 @@ export function Home() {
 
     getData();
   }, []);
-
-  if (loading) {
-    return <Loading />;
-  }
 
   function handleSearch(e: FormEvent) {
     e.preventDefault();
@@ -83,56 +83,64 @@ export function Home() {
 
   return (
     <main className={styles.container}>
-      <form className={styles.form} onSubmit={handleSearch}>
-        <button type="submit">
-          <FaSearchDollar size={30} color="#1d1c20" />
-        </button>
-        <input
-          placeholder="Digite o simbolo da moeda: BTC..."
-          value={inputValue}
-          className={styles.boldPlaceholder}
-          onChange={(e) => setInputValue(e.target.value)}
-        />
-      </form>
+      {loading ? (
+        <Loading />
+      ) : (
+        <>
+          <form className={styles.form} onSubmit={handleSearch}>
+            <button type="submit">
+              <FaSearchDollar size={30} color="#1d1c20" />
+            </button>
+            <input
+              placeholder="Digite o simbolo da moeda: BTC..."
+              value={inputValue}
+              className={styles.boldPlaceholder}
+              onChange={(e) => setInputValue(e.target.value)}
+            />
+          </form>
 
-      <table>
-        <thead>
-          <tr>
-            <th scope="col">Moeda</th>
-            <th scope="col">Valor Global</th>
-            <th scope="col">Preço</th>
-            <th scope="col">Stonks or Not Stonks</th>
-          </tr>
-        </thead>
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Moeda</th>
+                <th scope="col">Valor Global</th>
+                <th scope="col">Preço</th>
+                <th scope="col">Stonks or Not Stonks</th>
+              </tr>
+            </thead>
 
-        <tbody id="tbody">
-          {coins.map((coin) => (
-            <tr key={coin.name} className={styles.tr}>
-              <td className={styles.tdLabel} data-label="Moeda">
-                <Link className={styles.link} to={`/detail/${coin.symbol}`}>
-                  <span>{coin.name}</span> | {coin.symbol}
-                </Link>
-              </td>
-              <td className={styles.tdLabel} data-label="Mercado">
-                {coin.formatedMarket}
-              </td>
-              <td className={styles.tdLabel} data-label="Preço">
-                {coin.formatedPrice}
-              </td>
-              <td
-                className={
-                  coin.numberDelta && coin.numberDelta >= 0
-                    ? styles.tdProfit
-                    : styles.tdLoss
-                }
-                data-label="Volume"
-              >
-                <span>{coin.delta_24h}</span>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+            <tbody id="tbody">
+              {coins.map((coin) => (
+                <tr key={coin.name} className={styles.tr}>
+                  <td className={styles.tdLabel} data-label="Moeda">
+                    <Link className={styles.link} to={`/detail/${coin.symbol}`}>
+                      <span>{coin.name}</span> | {coin.symbol}
+                    </Link>
+                  </td>
+                  <td className={styles.tdLabel} data-label="Mercado">
+                    {coin.formatedMarket}
+                  </td>
+                  <td className={styles.tdLabel} data-label="Preço">
+                    {coin.formatedPrice}
+                  </td>
+                  <td
+                    className={
+                      coin.numberDelta && coin.numberDelta >= 0
+                        ? styles.tdProfit
+                        : styles.tdLoss
+                    }
+                    data-label="Volume"
+                  >
+                    <span>{coin.delta_24h}</span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </>
+      )}
     </main>
   );
-}
+};
+
+export default Home;
