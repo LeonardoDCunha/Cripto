@@ -1,6 +1,6 @@
 import React, { FormEvent, useEffect, useState } from "react";
 import styles from "./home.module.css";
-import { FaSearchDollar } from "react-icons/fa";
+import { FaSearchDollar, FaUncharted } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import Loading from "../../components/loading";
 
@@ -26,7 +26,7 @@ interface ApiResponse {
   coins: CoinProps[];
 }
 
-const Home: React.FC = () => {
+export function Home() {
   const [coins, setCoins] = useState<FormattedCoinProps[]>([]);
   const [inputValue, setInputValue] = useState("");
   const navigate = useNavigate();
@@ -141,6 +141,4 @@ const Home: React.FC = () => {
       )}
     </main>
   );
-};
-
-export default Home;
+}
